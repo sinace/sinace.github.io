@@ -1,20 +1,130 @@
-<!doctype html>
-<html lang="en">
+<!DOCTYPE html>
+<html>
 
 <head>
-    <meta charset="utf-8">
-    <title>Jema</title>
-    <base href="https://sinace.github.io/sinace.github.io/">
-    <meta name="viewport" content="width=device-width, initial-scale=1">
-    <link rel="icon" type="image/x-icon" href="favicon.ico">
-<link rel="stylesheet" href="styles.e3a4995461baf2eee1fa.css"></head>
+    <!--
+    If you are serving your web app in a path other than the root, change the
+    href value below to reflect the base path you are serving from.
+
+    The path provided below has to start and end with a slash "/" in order for
+    it to work correctly.
+
+    For more details:
+    * https://developer.mozilla.org/en-US/docs/Web/HTML/Element/base
+  -->
+    <base href="/">
+
+    <meta charset="UTF-8">
+    <meta content="IE=Edge" http-equiv="X-UA-Compatible">
+    <meta name="description" content="A new Flutter project.">
+
+    <!-- iOS meta tags & icons -->
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black">
+    <meta name="apple-mobile-web-app-title" content="jema">
+    <link rel="apple-touch-icon" href="icons/Icon-192.png">
+
+    <title>jema</title>
+    <link rel="manifest" href="manifest.json">
+</head>
 
 <body>
-    <app-root></app-root>
+    <!-- This script installs service_worker.js to provide PWA functionality to
+       application. For more information, see:
+       https://developers.google.com/web/fundamentals/primers/service-workers -->
 
-    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo" crossorigin="anonymous"></script>
-    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.7/umd/popper.min.js" integrity="sha384-UO2eT0CpHqdSJQ6hJty5KVphtPhzWj9WO1clHTMGa3JDZwrnQq4sF86dIHNDz0W1" crossorigin="anonymous"></script>
-    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.3.1/js/bootstrap.min.js" integrity="sha384-JjSmVgyd0p3pXB1rRibZUAYoIIy6OrQ6VrjIEaFf/nJGzIxFDsf4x0xIM+B07jRM" crossorigin="anonymous"></script>
-<script src="runtime-es2015.858f8dd898b75fe86926.js" type="module"></script><script src="polyfills-es2015.27661dfa98f6332c27dc.js" type="module"></script><script src="runtime-es5.741402d1d47331ce975c.js" nomodule></script><script src="polyfills-es5.405730e5ac8f727bd7d7.js" nomodule></script><script src="main-es2015.163234606538667aad70.js" type="module"></script><script src="main-es5.9746114132772357fcff.js" nomodule></script></body>
+    <!-- The core Firebase JS SDK is always required and must be listed first -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-app.js"></script>
+
+    <!-- TODO: Add SDKs for Firebase products that you want to use
+     https://firebase.google.com/docs/web/setup#available-libraries -->
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-auth.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-firestore.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/8.6.1/firebase-analytics.js"></script>
+
+    <script>
+        // Your web app's Firebase configuration
+        // For Firebase JS SDK v7.20.0 and later, measurementId is optional
+        var firebaseConfig = {
+            apiKey: "AIzaSyAYqjYFHi8OnrLkwJ7nil_QzYL-nUXNh1g",
+            authDomain: "jema-f48a1.firebaseapp.com",
+            databaseURL: "https://jema-f48a1.firebaseio.com",
+            projectId: "jema-f48a1",
+            storageBucket: "jema-f48a1.appspot.com",
+            messagingSenderId: "775053573681",
+            appId: "1:775053573681:web:457745353ea2f3d8fa1f10",
+            measurementId: "G-3FHDPPD8MC"
+        };
+        // Initialize Firebase
+        firebase.initializeApp(firebaseConfig);
+        firebase.analytics();
+    </script>
+
+    <script>
+        var serviceWorkerVersion = '2887034127';
+        var scriptLoaded = false;
+
+        function loadMainDartJs() {
+            if (scriptLoaded) {
+                return;
+            }
+            scriptLoaded = true;
+            var scriptTag = document.createElement('script');
+            scriptTag.src = 'main.dart.js';
+            scriptTag.type = 'application/javascript';
+            document.body.append(scriptTag);
+        }
+
+        if ('serviceWorker' in navigator) {
+            // Service workers are supported. Use them.
+            window.addEventListener('load', function() {
+                // Wait for registration to finish before dropping the <script> tag.
+                // Otherwise, the browser will load the script multiple times,
+                // potentially different versions.
+                var serviceWorkerUrl = 'flutter_service_worker.js?v=' + serviceWorkerVersion;
+                navigator.serviceWorker.register(serviceWorkerUrl)
+                    .then((reg) => {
+                        function waitForActivation(serviceWorker) {
+                            serviceWorker.addEventListener('statechange', () => {
+                                if (serviceWorker.state == 'activated') {
+                                    console.log('Installed new service worker.');
+                                    loadMainDartJs();
+                                }
+                            });
+                        }
+                        if (!reg.active && (reg.installing || reg.waiting)) {
+                            // No active web worker and we have installed or are installing
+                            // one for the first time. Simply wait for it to activate.
+                            waitForActivation(reg.installing || reg.waiting);
+                        } else if (!reg.active.scriptURL.endsWith(serviceWorkerVersion)) {
+                            // When the app updates the serviceWorkerVersion changes, so we
+                            // need to ask the service worker to update.
+                            console.log('New service worker available.');
+                            reg.update();
+                            waitForActivation(reg.installing);
+                        } else {
+                            // Existing service worker is still good.
+                            console.log('Loading app from service worker.');
+                            loadMainDartJs();
+                        }
+                    });
+
+                // If service worker doesn't succeed in a reasonable amount of time,
+                // fallback to plaint <script> tag.
+                setTimeout(() => {
+                    if (!scriptLoaded) {
+                        console.warn(
+                            'Failed to load app from service worker. Falling back to plain <script> tag.',
+                        );
+                        loadMainDartJs();
+                    }
+                }, 4000);
+            });
+        } else {
+            // Service workers not supported. Just drop the <script> tag.
+            loadMainDartJs();
+        }
+    </script>
+</body>
 
 </html>
